@@ -306,5 +306,3 @@ Tip: use [lazydocker](https://github.com/jesseduffield/lazydocker) to manage you
 3. Implement unit tests: Unit tests are meant to test certain functionalities in isolation. They usually don't connect to separate services and are very minimalistic. The main value of unit tests is confidence when code changes: changing code may break unit tests, which informs what behavior has changed. Unit tests can also work as a form of documenting the functionality of certain blocks of code. Whatever programming language you choose to use, there are probably at least a few unit test frameworks for it. For example, [pytest](https://docs.pytest.org/) is a good unit test framework for Python.
 4. Deploy your application somewhere: There are many ways to deploy an application to some cloud infrastructure.
 One easy way is to use services like [Fly](https://fly.io), and [Render](https://render.com). Those are some with web server free tiers, and a PostgreSQL server for free too. Heroku used to be a very good one, but they don't have free tiers anymore.
-
-test

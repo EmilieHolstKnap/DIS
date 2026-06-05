@@ -7,9 +7,11 @@ user = os.environ.get('PGUSER', 'emilie')
 password = os.environ.get('PGPASSWORD', '')
 host = os.environ.get('HOST', '127.0.0.1')
 
+
 def db_connection():
     db = f"dbname='todo' user={user} host={host}"
     return psycopg2.connect(db)
+
 
 def init_db():
     conn = db_connection()
@@ -45,7 +47,7 @@ def init_db():
     cur.execute("""
         CREATE TABLE IF NOT EXISTS events (
             id SERIAL PRIMARY KEY,
-            title TEXT UNIQUE NOT NULL,
+            title TEXT NOT NULL,
             description TEXT,
             start_time TIMESTAMP,
             end_time TIMESTAMP,
@@ -56,7 +58,9 @@ def init_db():
 
             organizer TEXT,
             ticket_url TEXT,
-            is_free BOOLEAN
+            is_free BOOLEAN,
+
+            UNIQUE(title, start_time, location_id)
         )
     """)
 
@@ -66,96 +70,105 @@ def init_db():
     # IMPORT CSV DATA
     # =====================
 
-    try:
-        with open("data/events.csv", encoding="utf-8") as file:
-            reader = csv.DictReader(file)
+    csv_files = [
+        "data/events.csv",
+        "data/generated_events.csv"
+    ]
 
-            for row in reader:
+    for csv_path in csv_files:
 
-                # Insert source
-                cur.execute(
-                    """
-                    INSERT INTO sources(name)
-                    VALUES (%s)
-                    ON CONFLICT DO NOTHING
-                    """,
-                    (row["source"],)
-                )
+        try:
+            with open(csv_path, encoding="utf-8") as file:
+                reader = csv.DictReader(file)
 
-                # Insert event type
-                cur.execute(
-                    """
-                    INSERT INTO event_types(name)
-                    VALUES (%s)
-                    ON CONFLICT DO NOTHING
-                    """,
-                    (row["event_type"],)
-                )
+                for row in reader:
 
-                # Insert location
-                cur.execute(
-                    """
-                    INSERT INTO locations(name, address, room)
-                    VALUES (%s, %s, %s)
-                    ON CONFLICT DO NOTHING
-                    """,
-                    (
-                        row["location"],
-                        row["address"],
-                        row["room"]
+                    # Insert source
+                    cur.execute(
+                        """
+                        INSERT INTO sources(name)
+                        VALUES (%s)
+                        ON CONFLICT DO NOTHING
+                        """,
+                        (row["source"],)
                     )
-                )
 
-                # Insert event
-                cur.execute(
-                    """
-                    INSERT INTO events
-                    (
-                        title,
-                        description,
-                        start_time,
-                        end_time,
-                        source_id,
-                        event_type_id,
-                        location_id,
-                        organizer,
-                        ticket_url,
-                        is_free
+                    # Insert event type
+                    cur.execute(
+                        """
+                        INSERT INTO event_types(name)
+                        VALUES (%s)
+                        ON CONFLICT DO NOTHING
+                        """,
+                        (row["event_type"],)
                     )
-                    VALUES
-                    (
-                        %s,
-                        %s,
-                        %s,
-                        %s,
-                        (SELECT id FROM sources WHERE name=%s),
-                        (SELECT id FROM event_types WHERE name=%s),
-                        (SELECT id FROM locations WHERE name=%s),
-                        %s,
-                        %s,
-                        %s
-                    )
-                    ON CONFLICT DO NOTHING
-                    """,
-                    (
-                        row["title"],
-                        row["description"],
-                        row["start_time"],
-                        row["end_time"],
-                        row["source"],
-                        row["event_type"],
-                        row["location"],
-                        row["organizer"],
-                        row["ticket_url"],
-                        row["is_free"].lower() == "true"
-                    )
-                )
 
-        conn.commit()
-        print("Events loaded successfully.")
+                    # Insert location
+                    cur.execute(
+                        """
+                        INSERT INTO locations(name, address, room)
+                        VALUES (%s, %s, %s)
+                        ON CONFLICT DO NOTHING
+                        """,
+                        (
+                            row["location"],
+                            row["address"],
+                            row["room"]
+                        )
+                    )
 
-    except FileNotFoundError:
-        print("data/events.csv not found. Tables created but no data imported.")
+                    # Insert event
+                    cur.execute(
+                        """
+                        INSERT INTO events
+                        (
+                            title,
+                            description,
+                            start_time,
+                            end_time,
+                            source_id,
+                            event_type_id,
+                            location_id,
+                            organizer,
+                            ticket_url,
+                            is_free
+                        )
+                        VALUES
+                        (
+                            %s,
+                            %s,
+                            %s,
+                            %s,
+                            (SELECT id FROM sources WHERE name=%s),
+                            (SELECT id FROM event_types WHERE name=%s),
+                            (SELECT id FROM locations WHERE name=%s),
+                            %s,
+                            %s,
+                            %s
+                        )
+                        ON CONFLICT DO NOTHING
+                        """,
+                        (
+                            row["title"],
+                            row["description"],
+                            row["start_time"],
+                            row["end_time"],
+                            row["source"],
+                            row["event_type"],
+                            row["location"],
+                            row["organizer"],
+                            row["ticket_url"],
+                            row["is_free"].lower() == "true"
+                        )
+                    )
+
+            print(f"Imported events from {csv_path}")
+
+        except FileNotFoundError:
+            print(f"{csv_path} not found. Skipping.")
+
+    conn.commit()
+    print("Events loaded successfully.")
 
     cur.close()
     conn.close()

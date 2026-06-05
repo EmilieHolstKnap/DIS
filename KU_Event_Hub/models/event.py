@@ -8,7 +8,7 @@ class Event:
         title,
         description,
         start_time,
-        source,
+        organizer,
         event_type,
         location
     ):
@@ -16,7 +16,7 @@ class Event:
         self.title = title
         self.description = description
         self.start_time = start_time
-        self.source = source
+        self.organizer = organizer
         self.event_type = event_type
         self.location = location
 
@@ -31,12 +31,10 @@ def list_events():
             events.title,
             events.description,
             events.start_time,
-            sources.name,
+            events.organizer,
             event_types.name,
             locations.name
         FROM events
-        JOIN sources
-            ON events.source_id = sources.id
         JOIN event_types
             ON events.event_type_id = event_types.id
         JOIN locations
@@ -55,7 +53,7 @@ def list_events():
                 event[1],  # title
                 event[2],  # description
                 event[3],  # start_time
-                event[4],  # source
+                event[4],  # organizer
                 event[5],  # event_type
                 event[6]   # location
             )
