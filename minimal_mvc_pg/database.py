@@ -1,32 +1,161 @@
+import csv
 import psycopg2
 import os
 
-# Try to get from system enviroment variable
-# Set your Postgres user and password as second arguments of these two next function calls
-user = os.environ.get('PGUSER', 'postgres')
-password = os.environ.get('PGPASSWORD', '123')
+# PostgreSQL configuration
+user = os.environ.get('PGUSER', 'emilie')
+password = os.environ.get('PGPASSWORD', '')
 host = os.environ.get('HOST', '127.0.0.1')
 
 def db_connection():
-    db = "dbname='todo' user=" + user + " host=" + host + " password =" + password
-    conn = psycopg2.connect(db)
-
-    return conn
+    db = f"dbname='todo' user={user} host={host}"
+    return psycopg2.connect(db)
 
 def init_db():
     conn = db_connection()
     cur = conn.cursor()
-    cur.execute('''CREATE TABLE IF NOT EXISTS categories (id SERIAL PRIMARY KEY, category_name TEXT NOT NULL UNIQUE)''')
-    cur.execute('''CREATE TABLE IF NOT EXISTS todos (id SERIAL PRIMARY KEY, todo_text TEXT NOT NULL UNIQUE, category_id INTEGER NOT NULL, FOREIGN KEY(category_id) REFERENCES categories(id))''')
+
+    # =====================
+    # CREATE TABLES
+    # =====================
+
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS sources (
+            id SERIAL PRIMARY KEY,
+            name TEXT UNIQUE NOT NULL
+        )
+    """)
+
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS event_types (
+            id SERIAL PRIMARY KEY,
+            name TEXT UNIQUE NOT NULL
+        )
+    """)
+
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS locations (
+            id SERIAL PRIMARY KEY,
+            name TEXT UNIQUE NOT NULL,
+            address TEXT,
+            room TEXT
+        )
+    """)
+
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS events (
+            id SERIAL PRIMARY KEY,
+            title TEXT UNIQUE NOT NULL,
+            description TEXT,
+            start_time TIMESTAMP,
+            end_time TIMESTAMP,
+
+            source_id INTEGER REFERENCES sources(id),
+            event_type_id INTEGER REFERENCES event_types(id),
+            location_id INTEGER REFERENCES locations(id),
+
+            organizer TEXT,
+            ticket_url TEXT,
+            is_free BOOLEAN
+        )
+    """)
+
     conn.commit()
 
-    categories = ['DIS', 'House chores']
-    for category in categories:
-        cur.execute('INSERT INTO categories (category_name) VALUES (%s) ON CONFLICT DO NOTHING', (category,))
+    # =====================
+    # IMPORT CSV DATA
+    # =====================
 
-    todos = [('Assignment 1', 'DIS'), ('Groceries', 'House chores'), ('Assignment 2', 'DIS'), ('Project', 'DIS')]
-    for (todo, category) in todos:
-        cur.execute('INSERT INTO todos (todo_text, category_id) VALUES (%s, (SELECT id FROM categories WHERE category_name = %s)) ON CONFLICT DO NOTHING', (todo, category))
+    try:
+        with open("data/events.csv", encoding="utf-8") as file:
+            reader = csv.DictReader(file)
 
-    conn.commit()
+            for row in reader:
+
+                # Insert source
+                cur.execute(
+                    """
+                    INSERT INTO sources(name)
+                    VALUES (%s)
+                    ON CONFLICT DO NOTHING
+                    """,
+                    (row["source"],)
+                )
+
+                # Insert event type
+                cur.execute(
+                    """
+                    INSERT INTO event_types(name)
+                    VALUES (%s)
+                    ON CONFLICT DO NOTHING
+                    """,
+                    (row["event_type"],)
+                )
+
+                # Insert location
+                cur.execute(
+                    """
+                    INSERT INTO locations(name, address, room)
+                    VALUES (%s, %s, %s)
+                    ON CONFLICT DO NOTHING
+                    """,
+                    (
+                        row["location"],
+                        row["address"],
+                        row["room"]
+                    )
+                )
+
+                # Insert event
+                cur.execute(
+                    """
+                    INSERT INTO events
+                    (
+                        title,
+                        description,
+                        start_time,
+                        end_time,
+                        source_id,
+                        event_type_id,
+                        location_id,
+                        organizer,
+                        ticket_url,
+                        is_free
+                    )
+                    VALUES
+                    (
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        (SELECT id FROM sources WHERE name=%s),
+                        (SELECT id FROM event_types WHERE name=%s),
+                        (SELECT id FROM locations WHERE name=%s),
+                        %s,
+                        %s,
+                        %s
+                    )
+                    ON CONFLICT DO NOTHING
+                    """,
+                    (
+                        row["title"],
+                        row["description"],
+                        row["start_time"],
+                        row["end_time"],
+                        row["source"],
+                        row["event_type"],
+                        row["location"],
+                        row["organizer"],
+                        row["ticket_url"],
+                        row["is_free"].lower() == "true"
+                    )
+                )
+
+        conn.commit()
+        print("Events loaded successfully.")
+
+    except FileNotFoundError:
+        print("data/events.csv not found. Tables created but no data imported.")
+
+    cur.close()
     conn.close()

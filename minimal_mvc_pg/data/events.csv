@@ -1,0 +1,14 @@
+title,description,start_time,end_time,source,event_type,location,address,room,organizer,ticket_url,is_free
+Intro to Machine Learning Study Night,Student-led study session for CS students,2026-06-12 17:00,2026-06-12 19:00,Facebook,Academic,DIKU,Universitetsparken 1 Copenhagen,Auditorium 1,DIKU Student Council,,true
+Thesis Writing Workshop,Support event about planning your thesis,2026-06-14 13:00,2026-06-14 15:00,Absalon,Support,South Campus,Karen Blixens Plads 8 Copenhagen,Room 15A.0.13,KU Academic Support,,true
+Friday Bar for Computer Science,Social event for computer science students,2026-06-20 16:00,2026-06-20 23:00,Facebook,Social,DIKU,Universitetsparken 1 Copenhagen,Canteen,DIKU Friday Bar,https://example.com/tickets,false
+Career Talk with Netcompany,Company presentation and networking,2026-06-25 14:00,2026-06-25 16:00,KUnet,Career,DIKU,Universitetsparken 1 Copenhagen,Auditorium 2,DIKU Career Office,,true
+Exam Anxiety Support Session,Support event before exam period,2026-06-27 10:00,2026-06-27 12:00,Absalon,Support,South Campus,Karen Blixens Plads 8 Copenhagen,Room 12.1.45,KU Student Guidance,,true
+Caféen? Bodegafest,Fredag event at Caféen,2026-06-05 18:00,2026-06-05 23:59,Facebook,Social,Caféen?,Universitetsparken 15C 2100 Copenhagen,,Caféen?,,false
+Caféen? Pub Quiz Night,Weekly pub quiz at Caféen,2026-06-02 19:00,2026-06-02 22:00,Facebook,Social,Caféen?,Universitetsparken 15C 2100 Copenhagen,,Caféen?,,false
+Meeple Monday - Board Game Night,Board game night at Caféen,2026-06-01 18:00,2026-06-01 22:00,Facebook,Social,Caféen?,Universitetsparken 15C 2100 Copenhagen,,Caféen?,,true
+Bestyrelsesmøde på C?,Board meeting at Caféen,2026-05-27 17:00,2026-05-27 19:00,Facebook,Support,Caféen?,Universitetsparken 15C 2100 Copenhagen,,Caféen?,,true
+Gammel Røvhulsfrebar,Friday bar event at Caféen,2026-05-22 16:00,2026-05-22 23:59,Facebook,Social,Caféen?,Universitetsparken 15C 2100 Copenhagen,,Caféen?,,false
+Snacks bar,Snack bar event at Caféen,2026-05-15 16:00,2026-05-15 22:00,Facebook,Social,Caféen?,Universitetsparken 15C 2100 Copenhagen,,Caféen?,,false
+Bordfodboldturnering - Semifinale og finale,Table football tournament semifinal and final,2026-05-13 18:00,2026-05-13 22:00,Facebook,Social,Caféen?,Universitetsparken 15C 2100 Copenhagen,,Caféen?,,true
+Bordfodboldturnering - Kvartfinale,Table football tournament quarterfinal,2026-05-12 18:00,2026-05-12 22:00,Facebook,Social,Caféen?,Universitetsparken 15C 2100 Copenhagen,,Caféen?,,true

@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+    <title>KU Event Hub</title>
+</head>
+
+<body>
+
+<h1>KU Event Hub</h1>
+
+<table border="1">
+    <tr>
+        <th>Title</th>
+        <th>Date</th>
+        <th>Source</th>
+        <th>Type</th>
+        <th>Location</th>
+    </tr>
+
+    {% for event in events %}
+    <tr>
+        <td>{{ event.title }}</td>
+        <td>{{ event.start_time }}</td>
+        <td>{{ event.source }}</td>
+        <td>{{ event.event_type }}</td>
+        <td>{{ event.location }}</td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+</body>
+</html>
