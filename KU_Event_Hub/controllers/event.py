@@ -9,6 +9,11 @@ from models.event import (
 bp = Blueprint('event', __name__, url_prefix='/')
 
 
+@bp.route('/')
+def home():
+    return render_template('pages/home.html')
+
+
 @bp.route('/events')
 def events():
     selected_type = request.args.get('type')
@@ -23,7 +28,7 @@ def events():
     organizers = list_organizers()
 
     return render_template(
-        'events.html',
+        'pages/events.html',
         events=events,
         event_types=event_types,
         organizers=organizers,
@@ -39,4 +44,4 @@ def event_details(event_id):
     if event is None:
         return "Event not found", 404
 
-    return render_template('event_details.html', event=event)
+    return render_template('pages/event_details.html', event=event)

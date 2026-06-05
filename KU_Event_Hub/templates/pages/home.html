@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}KU Event Hub{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+
+    <div class="hero-content">
+        <h1>Discover Events Across KU</h1>
+
+        <p>
+            Find social events, career fairs, workshops,
+            student activities, talks and conferences all in one place.
+        </p>
+
+        <a href="{{ url_for('event.events') }}" class="btn">
+            Browse Events
+        </a>
+    </div>
+
+</section>
+
+<section class="features">
+
+    <div class="feature-card">
+        <h2>🎓 Academic Events</h2>
+        <p>
+            Talks, seminars, workshops and conferences.
+        </p>
+    </div>
+
+    <div class="feature-card">
+        <h2>🤝 Networking</h2>
+        <p>
+            Meet companies and expand your professional network.
+        </p>
+    </div>
+
+    <div class="feature-card">
+        <h2>🎉 Student Life</h2>
+        <p>
+            Social events, clubs and student activities.
+        </p>
+    </div>
+
+</section>
+
+<section class="info-section">
+
+    <div>
+        <h2>Never Miss An Event</h2>
+
+        <p>
+            Browse events by organizer, type and date.
+            Keep track of everything happening around KU.
+        </p>
+    </div>
+
+</section>
+
+{% endblock %}
