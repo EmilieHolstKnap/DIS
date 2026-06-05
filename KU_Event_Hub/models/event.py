@@ -8,20 +8,79 @@ class Event:
         title,
         description,
         start_time,
+        end_time,
         organizer,
         event_type,
-        location
+        location,
+        ticket_url,
+        is_free
     ):
         self.id = id
         self.title = title
         self.description = description
         self.start_time = start_time
+        self.end_time = end_time
         self.organizer = organizer
         self.event_type = event_type
         self.location = location
+        self.ticket_url = ticket_url
+        self.is_free = is_free
 
 
-def list_events():
+def list_events(event_type=None, organizer=None):
+    conn = db_connection()
+    cur = conn.cursor()
+
+    query = """
+        SELECT
+            events.id,
+            events.title,
+            events.description,
+            events.start_time,
+            events.end_time,
+            events.organizer,
+            event_types.name,
+            locations.name,
+            events.ticket_url,
+            events.is_free
+        FROM events
+        JOIN event_types
+            ON events.event_type_id = event_types.id
+        JOIN locations
+            ON events.location_id = locations.id
+    """
+
+    conditions = []
+    params = []
+
+    if event_type:
+        conditions.append("event_types.name = %s")
+        params.append(event_type)
+
+    if organizer:
+        conditions.append("events.organizer = %s")
+        params.append(organizer)
+
+    if conditions:
+        query += " WHERE " + " AND ".join(conditions)
+
+    query += " ORDER BY events.start_time"
+
+    cur.execute(query, params)
+
+    db_events = cur.fetchall()
+
+    events = []
+    for event in db_events:
+        events.append(Event(*event))
+
+    cur.close()
+    conn.close()
+
+    return events
+
+
+def get_event(event_id):
     conn = db_connection()
     cur = conn.cursor()
 
@@ -31,35 +90,64 @@ def list_events():
             events.title,
             events.description,
             events.start_time,
+            events.end_time,
             events.organizer,
             event_types.name,
-            locations.name
+            locations.name,
+            events.ticket_url,
+            events.is_free
         FROM events
         JOIN event_types
             ON events.event_type_id = event_types.id
         JOIN locations
             ON events.location_id = locations.id
-        ORDER BY events.start_time
-    """)
+        WHERE events.id = %s
+    """, (event_id,))
 
-    db_events = cur.fetchall()
-
-    events = []
-
-    for event in db_events:
-        events.append(
-            Event(
-                event[0],  # id
-                event[1],  # title
-                event[2],  # description
-                event[3],  # start_time
-                event[4],  # organizer
-                event[5],  # event_type
-                event[6]   # location
-            )
-        )
+    event = cur.fetchone()
 
     cur.close()
     conn.close()
 
-    return events
+    if event is None:
+        return None
+
+    return Event(*event)
+
+
+def list_event_types():
+    conn = db_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT name
+        FROM event_types
+        ORDER BY name
+    """)
+
+    event_types = [row[0] for row in cur.fetchall()]
+
+    cur.close()
+    conn.close()
+
+    return event_types
+
+
+def list_organizers():
+    conn = db_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT DISTINCT organizer
+        FROM events
+        WHERE organizer IS NOT NULL
+        AND organizer != ''
+        ORDER BY organizer
+    """)
+
+    organizers = [row[0] for row in cur.fetchall()]
+
+    cur.close()
+    conn.close()
+
+    return organizers

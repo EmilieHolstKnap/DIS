@@ -1,12 +1,47 @@
 <!doctype html>
-<html>
-<head>
-    <title>KU Event Hub</title>
-</head>
-
-<body>
+<title>KU Event Hub</title>
 
 <h1>KU Event Hub</h1>
+
+<form method="GET" action="/events">
+
+    <label for="type">Type:</label>
+
+    <select name="type" id="type">
+        <option value="">All</option>
+
+        {% for event_type in event_types %}
+            <option value="{{ event_type }}"
+                {% if selected_type == event_type %}
+                    selected
+                {% endif %}
+            >
+                {{ event_type }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <label for="organizer">Organizer:</label>
+
+    <select name="organizer" id="organizer">
+        <option value="">All</option>
+
+        {% for organizer in organizers %}
+            <option value="{{ organizer }}"
+                {% if selected_organizer == organizer %}
+                    selected
+                {% endif %}
+            >
+                {{ organizer }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <input type="submit" value="Filter">
+
+</form>
+
+<br>
 
 <table border="1">
     <tr>
@@ -19,15 +54,15 @@
 
     {% for event in events %}
     <tr>
-        <td>{{ event.title }}</td>
-        <td>{{ event.start_time }}</td>
+        <td>
+            <a href="{{ url_for('event.event_details', event_id=event.id) }}">
+                {{ event.title }}
+            </a>
+        </td>
+        <td>{{ event.start_time.strftime('%d %b %Y, %H:%M') }}</td>
         <td>{{ event.organizer }}</td>
         <td>{{ event.event_type }}</td>
         <td>{{ event.location }}</td>
     </tr>
     {% endfor %}
-
 </table>
-
-</body>
-</html>

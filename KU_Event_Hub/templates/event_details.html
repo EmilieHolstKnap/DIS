@@ -1,0 +1,35 @@
+<!doctype html>
+<title>{{ event.title }}</title>
+
+<a href="{{ url_for('event.events') }}">← Back to events</a>
+
+<h1>{{ event.title }}</h1>
+
+<p><strong>Description:</strong> {{ event.description }}</p>
+
+<p><strong>Start:</strong> {{ event.start_time.strftime('%d %b %Y, %H:%M') }}</p>
+
+{% if event.end_time %}
+<p><strong>End:</strong> {{ event.end_time.strftime('%d %b %Y, %H:%M') }}</p>
+{% endif %}
+
+<p><strong>Organizer:</strong> {{ event.organizer }}</p>
+
+<p><strong>Type:</strong> {{ event.event_type }}</p>
+
+<p><strong>Location:</strong> {{ event.location }}</p>
+
+<p>
+    <strong>Price:</strong>
+    {% if event.is_free %}
+        Free
+    {% else %}
+        Paid / registration may be required
+    {% endif %}
+</p>
+
+{% if event.ticket_url %}
+<p>
+    <a href="{{ event.ticket_url }}">Tickets / more info</a>
+</p>
+{% endif %}
