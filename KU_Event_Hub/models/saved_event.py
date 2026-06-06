@@ -52,6 +52,25 @@ def get_saved_events(user_id):
     return events
 
 
+def is_event_saved(user_id, event_id):
+    conn = db_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT 1
+        FROM saved_events
+        WHERE user_id = %s
+        AND event_id = %s
+    """, (user_id, event_id))
+
+    saved = cur.fetchone() is not None
+
+    cur.close()
+    conn.close()
+
+    return saved
+
+
 def remove_saved_event(user_id, event_id):
     conn = db_connection()
     cur = conn.cursor()

@@ -47,7 +47,7 @@ a, a:visited, a:focus, a:active {
 .btn, a.btn {
     background-color: var(--green);
     color: var(--white);
-    display: grid;;
+    display: grid;
     place-items: center;
     border-radius: var(--border-radius);
     border: none;

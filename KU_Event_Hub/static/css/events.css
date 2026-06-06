@@ -24,6 +24,16 @@
     align-items: end;
 }
 
+.events__filter div {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.events__filter label {
+    white-space: nowrap;
+}
+
 .events-table {
     width: 100%;
     border-collapse: collapse;

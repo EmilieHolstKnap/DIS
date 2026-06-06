@@ -21,13 +21,31 @@
 <p>{{ event.description }}</p>
 
 {% if session.get("user_id") %}
-<form method="POST"
-      action="{{ url_for('event.save',
-                          event_id=event.id) }}">
-    <button type="submit">
-        Save Event
-    </button>
-</form>
+
+    {% if saved %}
+        <form method="POST"
+              action="{{ url_for('event.unsave',
+                                  event_id=event.id) }}">
+            <input  type="hidden"
+                    name="next"
+                    value="{{ request.path }}">
+                    
+            <button type="submit">
+                Unsave Event
+            </button>
+        </form>
+
+    {% else %}
+        <form method="POST"
+              action="{{ url_for('event.save',
+                                  event_id=event.id) }}">
+            <button type="submit">
+                Save Event
+            </button>
+        </form>
+
+    {% endif %}
+
 {% endif %}
 
 <a href="{{ url_for('event.events') }}">

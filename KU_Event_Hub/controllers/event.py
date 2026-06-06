@@ -1,6 +1,11 @@
 from flask import Blueprint, render_template, request
 from flask import session, redirect, url_for
-from models.saved_event import save_event, get_saved_events, remove_saved_event 
+from models.saved_event import (
+    save_event,
+    get_saved_events,
+    remove_saved_event,
+    is_event_saved
+)
 from models.event import (
     list_events,
     get_event,
@@ -58,7 +63,19 @@ def event_details(event_id):
     if event is None:
         return "Event not found", 404
 
-    return render_template('pages/event_details.html', event=event)
+    saved = False
+
+    if "user_id" in session:
+        saved = is_event_saved(
+            session["user_id"],
+            event_id
+        )
+
+    return render_template(
+        'pages/event_details.html',
+        event=event,
+        saved=saved
+    )
 
 @bp.route("/my-events")
 def my_events():
@@ -80,5 +97,10 @@ def unsave(event_id):
         return redirect(url_for("auth.login"))
 
     remove_saved_event(session["user_id"], event_id)
+
+    next_page = request.form.get("next")
+
+    if next_page:
+        return redirect(next_page)
 
     return redirect(url_for("event.my_events"))
