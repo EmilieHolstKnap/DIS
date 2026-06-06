@@ -10,6 +10,7 @@ port = os.getenv("PGPORT", "5432")
 
 
 def db_connection():
+    print(f"Connecting as {user}@{host}")
     return psycopg2.connect(
         dbname=database,
         user=user,
