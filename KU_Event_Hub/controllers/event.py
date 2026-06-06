@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request
+from flask import session, redirect, url_for
 from models.event import (
     list_events,
     get_event,
@@ -36,6 +37,12 @@ def events():
         selected_organizer=selected_organizer
     )
 
+@bp.route("/my-events")
+def my_events():
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    return render_template("pages/my_events.html")
 
 @bp.route('/events/<int:event_id>')
 def event_details(event_id):
