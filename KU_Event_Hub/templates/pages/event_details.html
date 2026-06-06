@@ -20,6 +20,16 @@
 
 <p>{{ event.description }}</p>
 
+{% if session.get("user_id") %}
+<form method="POST"
+      action="{{ url_for('event.save',
+                          event_id=event.id) }}">
+    <button type="submit">
+        Save Event
+    </button>
+</form>
+{% endif %}
+
 <a href="{{ url_for('event.events') }}">
     Back to Events
 </a>

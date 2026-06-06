@@ -1,5 +1,9 @@
 from database import db_connection
 from werkzeug.security import generate_password_hash, check_password_hash
+import re
+
+def valid_username(username):
+    return re.match(r"^[A-Za-z0-9_]{3,20}$", username)
 
 def create_user(username, password):
     conn = db_connection()

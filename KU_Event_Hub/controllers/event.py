@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request
 from flask import session, redirect, url_for
+from models.saved_event import save_event, get_saved_events, remove_saved_event 
 from models.event import (
     list_events,
     get_event,
@@ -37,12 +38,18 @@ def events():
         selected_organizer=selected_organizer
     )
 
-@bp.route("/my-events")
-def my_events():
+@bp.route("/events/<int:event_id>/save", methods=["POST"])
+def save(event_id):
+
     if "user_id" not in session:
         return redirect(url_for("auth.login"))
 
-    return render_template("pages/my_events.html")
+    save_event(session["user_id"], event_id)
+
+    return redirect(
+        url_for("event.event_details",
+                event_id=event_id)
+    )
 
 @bp.route('/events/<int:event_id>')
 def event_details(event_id):
@@ -52,3 +59,26 @@ def event_details(event_id):
         return "Event not found", 404
 
     return render_template('pages/event_details.html', event=event)
+
+@bp.route("/my-events")
+def my_events():
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    events = get_saved_events(session["user_id"])
+
+    return render_template(
+        "pages/my_events.html",
+        events=events
+    )
+
+@bp.route("/events/<int:event_id>/unsave", methods=["POST"])
+def unsave(event_id):
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    remove_saved_event(session["user_id"], event_id)
+
+    return redirect(url_for("event.my_events"))
