@@ -9,7 +9,7 @@ host = os.environ.get('HOST', '127.0.0.1')
 
 
 def db_connection():
-    db = f"dbname='ku_event_hub' user={user} host={host}"
+    db = f"dbname='ku_event_hub' user={user} password={password} host={host}"
     return psycopg2.connect(db)
 
 
