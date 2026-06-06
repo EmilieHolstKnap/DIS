@@ -6,6 +6,7 @@
 
         <div class="links-wrapper">
             <a href="{{ url_for('event.events') }}">Events</a>
+            <a href="{{ url_for('event.organizers') }}">Organizers</a>
 
             {% if session.get("user_id") %}
                 <a href="{{ url_for('event.my_events') }}">My Events</a>

@@ -6,11 +6,17 @@ from models.saved_event import (
     remove_saved_event,
     is_event_saved
 )
+from models.subscription import (
+    subscribe_organizer,
+    unsubscribe_organizer,
+    is_organizer_subscribed
+)
 from models.event import (
     list_events,
     get_event,
     list_event_types,
-    list_organizers
+    list_organizers,
+    list_events_grouped_by_organizer
 )
 
 bp = Blueprint('event', __name__, url_prefix='/')
@@ -43,6 +49,15 @@ def events():
         selected_organizer=selected_organizer
     )
 
+@bp.route('/organizers')
+def organizers():
+    grouped_events = list_events_grouped_by_organizer()
+
+    return render_template(
+        'pages/organizers.html',
+        grouped_events=grouped_events
+    )
+
 @bp.route("/events/<int:event_id>/save", methods=["POST"])
 def save(event_id):
 
@@ -56,6 +71,7 @@ def save(event_id):
                 event_id=event_id)
     )
 
+
 @bp.route('/events/<int:event_id>')
 def event_details(event_id):
     event = get_event(event_id)
@@ -64,6 +80,7 @@ def event_details(event_id):
         return "Event not found", 404
 
     saved = False
+    subscribed = False
 
     if "user_id" in session:
         saved = is_event_saved(
@@ -71,11 +88,18 @@ def event_details(event_id):
             event_id
         )
 
+        subscribed = is_organizer_subscribed(
+            session["user_id"],
+            event.organizer
+        )
+
     return render_template(
         'pages/event_details.html',
         event=event,
-        saved=saved
+        saved=saved,
+        subscribed=subscribed
     )
+
 
 @bp.route("/my-events")
 def my_events():
@@ -89,6 +113,7 @@ def my_events():
         "pages/my_events.html",
         events=events
     )
+
 
 @bp.route("/events/<int:event_id>/unsave", methods=["POST"])
 def unsave(event_id):
@@ -104,3 +129,36 @@ def unsave(event_id):
         return redirect(next_page)
 
     return redirect(url_for("event.my_events"))
+
+
+@bp.route("/organizers/<organizer>/subscribe", methods=["POST"])
+def subscribe(organizer):
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    subscribe_organizer(session["user_id"], organizer)
+
+    next_page = request.form.get("next")
+
+    if next_page:
+        return redirect(next_page)
+
+    return redirect(url_for("event.events"))
+
+
+@bp.route("/organizers/<organizer>/unsubscribe", methods=["POST"])
+def unsubscribe(organizer):
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    unsubscribe_organizer(session["user_id"], organizer)
+
+    next_page = request.form.get("next")
+
+    if next_page:
+        return redirect(next_page)
+
+    return redirect(url_for("event.events"))
+

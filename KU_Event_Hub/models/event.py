@@ -151,3 +151,18 @@ def list_organizers():
     conn.close()
 
     return organizers
+
+def list_events_grouped_by_organizer():
+    events = list_events()
+
+    grouped_events = {}
+
+    for event in events:
+        organizer = event.organizer or "Unknown organizer"
+
+        if organizer not in grouped_events:
+            grouped_events[organizer] = []
+
+        grouped_events[organizer].append(event)
+
+    return grouped_events

@@ -80,6 +80,14 @@ def init_db():
         )
     """)
 
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS organizer_subscriptions (
+            user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+            organizer TEXT NOT NULL,
+            PRIMARY KEY(user_id, organizer)
+        )
+    """)
+
     conn.commit()
 
     # =====================

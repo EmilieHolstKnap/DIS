@@ -12,6 +12,38 @@
 <p><strong>Organizer:</strong>
 {{ event.organizer }}</p>
 
+{% if session.get("user_id") %}
+
+    {% if subscribed %}
+        <form method="POST"
+                action="{{ url_for('event.unsubscribe',
+                                    organizer=event.organizer) }}">
+            <input type="hidden"
+                    name="next"
+                    value="{{ request.path }}">
+
+            <button type="submit">
+                Unsubscribe from Organizer
+            </button>
+        </form>
+
+    {% else %}
+        <form method="POST"
+                action="{{ url_for('event.subscribe',
+                                    organizer=event.organizer) }}">
+            <input type="hidden"
+                    name="next"
+                    value="{{ request.path }}">
+
+            <button type="submit">
+                Subscribe to Organizer
+            </button>
+        </form>
+
+    {% endif %}
+
+{% endif %}
+
 <p><strong>Type:</strong>
 {{ event.event_type }}</p>
 
