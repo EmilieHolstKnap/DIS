@@ -2,16 +2,21 @@ import csv
 import psycopg2
 import os
 
-# PostgreSQL configuration
-user = os.environ.get('PGUSER', 'emilie')
-password = os.environ.get('PGPASSWORD', '')
-host = os.environ.get('HOST', '127.0.0.1')
+user = os.getenv("PGUSER", "postgres")
+password = os.getenv("PGPASSWORD", "123")
+host = os.getenv("PGHOST", "127.0.0.1")
+database = os.getenv("PGDATABASE", "ku_event_hub")
+port = os.getenv("PGPORT", "5432")
 
 
 def db_connection():
-    db = f"dbname='ku_event_hub' user={user} password={password} host={host}"
-    return psycopg2.connect(db)
-
+    return psycopg2.connect(
+        dbname=database,
+        user=user,
+        password=password,
+        host=host,
+        port=port
+    )
 
 def init_db():
     conn = db_connection()
