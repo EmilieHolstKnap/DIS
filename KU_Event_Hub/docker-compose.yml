@@ -15,7 +15,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: '123'
-      POSTGRES_DB: todo
+      POSTGRES_DB: ku_event_hub
   # Our app container
   web:
     build:
@@ -33,6 +33,7 @@ services:
       - PGPASSWORD='123'
       # Setting the host in this enviroment variable is very important as docker sets the address of the database
       - HOST='database'
+      - SECRET_KEY=7f3b9d8a4e2c1f6a9b5d7e8c3f1a2b4c
     ports:
       # This makes the port 5000 accessible outside of the docker
       - "5000:5000"

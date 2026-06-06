@@ -13,18 +13,28 @@
             <div class="event-card">
 
                 <h2>
-                    <a href="{{ url_for('event.event_details', event_id=event[0]) }}">
-                        {{ event[1] }}
+                    <a href="{{ url_for('event.event_details',
+                                        event_id=event.id) }}">
+                        {{ event.title }}
                     </a>
                 </h2>
 
-                <p>{{ event[2] }}</p>
-                <p>{{ event[3] }}</p>
-                <p>{{ event[4] }}</p>
+                <p>{{ event.description }}</p>
+
+                <p>
+                    {{ event.start_time.strftime('%d %b %Y, %H:%M') }}
+                </p>
+
+                <p>
+                    {{ event.end_time.strftime('%d %b %Y, %H:%M') }}
+                </p>
 
                 <form method="POST"
-                    action="{{ url_for('event.unsave', event_id=event[0]) }}">
-                    <button type="submit">Unsave</button>
+                      action="{{ url_for('event.unsave',
+                                          event_id=event.id) }}">
+                    <button type="submit">
+                        Unsave
+                    </button>
                 </form>
 
             </div>

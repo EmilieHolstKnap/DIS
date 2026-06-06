@@ -1,4 +1,6 @@
 from database import db_connection
+from models.event import Event
+
 
 def save_event(user_id, event_id):
     conn = db_connection()
@@ -11,23 +13,40 @@ def save_event(user_id, event_id):
     """, (user_id, event_id))
 
     conn.commit()
+    cur.close()
     conn.close()
 
-def get_saved_events(user_id):
 
+def get_saved_events(user_id):
     conn = db_connection()
     cur = conn.cursor()
 
     cur.execute("""
-        SELECT e.*
-        FROM events e
-        JOIN saved_events s
-          ON e.id = s.event_id
-        WHERE s.user_id = %s
+        SELECT
+            events.id,
+            events.title,
+            events.description,
+            events.start_time,
+            events.end_time,
+            events.organizer,
+            event_types.name,
+            locations.name,
+            events.ticket_url,
+            events.is_free
+        FROM events
+        JOIN saved_events
+            ON events.id = saved_events.event_id
+        JOIN event_types
+            ON events.event_type_id = event_types.id
+        JOIN locations
+            ON events.location_id = locations.id
+        WHERE saved_events.user_id = %s
+        ORDER BY events.start_time
     """, (user_id,))
 
-    events = cur.fetchall()
+    events = [Event(*row) for row in cur.fetchall()]
 
+    cur.close()
     conn.close()
 
     return events
@@ -44,4 +63,5 @@ def remove_saved_event(user_id, event_id):
     """, (user_id, event_id))
 
     conn.commit()
+    cur.close()
     conn.close()

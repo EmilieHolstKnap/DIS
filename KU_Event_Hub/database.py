@@ -9,7 +9,7 @@ host = os.environ.get('HOST', '127.0.0.1')
 
 
 def db_connection():
-    db = f"dbname='todo' user={user} host={host}"
+    db = f"dbname='ku_event_hub' user={user} host={host}"
     return psycopg2.connect(db)
 
 
@@ -74,11 +74,11 @@ def init_db():
 
     cur.execute("""
         CREATE TABLE IF NOT EXISTS saved_events (
-            user_id INTEGER NOT NULL,
-            event_id INTEGER NOT NULL,
+            user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+            event_id INTEGER NOT NULL REFERENCES events(id) ON DELETE CASCADE,
             PRIMARY KEY(user_id, event_id)
         )
-        """)
+    """)
 
     conn.commit()
 
