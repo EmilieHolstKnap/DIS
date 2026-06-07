@@ -120,7 +120,7 @@ Logged-in users can:
 - Unsubscribe from organizers.
 - Browse events grouped by organizer.
 
-## Database Interaction 🗄️
+## Database Interaction 
 
 The application interacts with a PostgreSQL database using SQL queries through the psycopg2 library.
 
@@ -132,7 +132,7 @@ The implementation includes all major SQL operations:
 
 All event and user data displayed in the application is retrieved from the database through SQL queries.
 
-## Regular Expression Matching 🔍
+## Regular Expression Matching 
 
 The application performs regular expression matching during user registration.
 
@@ -141,7 +141,7 @@ Usernames are validated using Python regular expressions before being stored in 
 This fulfills the course requirement of performing regular expression matching.
 
 
-## Known Backend Issues / Intended Features ⁉
+## Known Backend Issues / Intended Features
 
 - Organizer subscriptions are currently stored and managed correctly, but subscribed organizers are only displayed on the "My Events" page, and not yet used for filtering.
 - There is currently no administrative interface for adding or editing events through the application.
@@ -149,7 +149,7 @@ This fulfills the course requirement of performing regular expression matching.
 
 Future improvements include displaying events from subscribed organizers directly on the user's personal page and implementing event notifications.
 
-## Known Frontend Issues ☹
+## Known Frontend Issues 
 
 - Mobile responsiveness could be improved further, especially for event tables and navigation.
 - Organizer pages currently use basic collapsible sections and could benefit from a richer visual layout.
