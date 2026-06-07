@@ -19,7 +19,7 @@ If running locally, configure the following environment variables:
     export PGPASSWORD=<postgres_password>
     export PGDATABASE=ku_event_hub
     export PGHOST=127.0.0.1
-    export PGPGPORT=5432
+    export PGPORT=5432
 
 Then run the following command to initialize the database:
 
@@ -120,10 +120,30 @@ Logged-in users can:
 - Unsubscribe from organizers.
 - Browse events grouped by organizer.
 
+## Database Interaction 🗄️
+
+The application interacts with a PostgreSQL database using SQL queries through the psycopg2 library.
+
+The implementation includes all major SQL operations:
+
+- SELECT statements for retrieving events, users, saved events, and organizer subscriptions.
+- INSERT statements for creating users, importing events, saving events, and subscribing to organizers.
+- DELETE statements for removing saved events and organizer subscriptions.
+
+All event and user data displayed in the application is retrieved from the database through SQL queries.
+
+## Regular Expression Matching 🔍
+
+The application performs regular expression matching during user registration.
+
+Usernames are validated using Python regular expressions before being stored in the database. This ensures that usernames follow the required format and helps prevent invalid input from being registered.
+
+This fulfills the course requirement of performing regular expression matching.
+
+
 ## Known Backend Issues / Intended Features ⁉
 
-- Organizer subscriptions are currently stored and managed correctly, but subscribed organizers are not yet displayed on the "My Events" page.
-- Organizer images currently rely on manually assigned image files rather than database-stored metadata.
+- Organizer subscriptions are currently stored and managed correctly, but subscribed organizers are only displayed on the "My Events" page, and not yet used for filtering.
 - There is currently no administrative interface for adding or editing events through the application.
 - Event recommendations based on user subscriptions have not yet been implemented.
 
@@ -133,6 +153,6 @@ Future improvements include displaying events from subscribed organizers directl
 
 - Mobile responsiveness could be improved further, especially for event tables and navigation.
 - Organizer pages currently use basic collapsible sections and could benefit from a richer visual layout.
-- Event and organizer images are limited and currently require manual assignment.
-- Success messages are not displayed after actions such as saving events, subscribing to organizers, or creating accounts.
+- Event and organizer images have not been added.
+- No confirmation messages are shown after successful actions (e.g., saving an event, subscribing to an organizer, or creating an account). The effects of these actions are still visible elsewhere in the application, such as on the "My Events" page or through the ability to unsubscribe and log out.
 - Missing favicon.ico console warning (ignored).
