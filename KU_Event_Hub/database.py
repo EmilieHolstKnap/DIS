@@ -3,9 +3,9 @@ import psycopg2
 import os
 
 user = os.getenv("PGUSER", "postgres")
-password = os.getenv("PGPASSWORD", "123")
+password = os.getenv("PGPASSWORD", "test123")
 host = os.getenv("PGHOST", "127.0.0.1")
-database = os.getenv("PGDATABASE", "ku_event_hub")
+database = os.getenv("PGDATABASE", "todo")
 port = os.getenv("PGPORT", "5432")
 
 
