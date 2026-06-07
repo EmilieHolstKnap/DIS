@@ -73,7 +73,7 @@ The application consists of two main modules: authentication and event managemen
 - /organizers/<organizer>/subscribe: Subscribe to an organizer.
 - /organizers/<organizer>/unsubscribe: Unsubscribe from an organizer.
 
-## Database Structure 🗄️
+## Database Structure 
 
 The application uses PostgreSQL and contains the following tables:
 
@@ -83,7 +83,7 @@ The application uses PostgreSQL and contains the following tables:
 - saved_events: Stores events saved by users.
 - organizer_subscriptions: Stores organizer subscriptions.
 
-## Features ⭐
+## Features 
 
 ### User Accounts
 
