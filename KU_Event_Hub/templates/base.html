@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}KU Event Hub{% endblock %}</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/bundle.css') }}">
+</head>
+<body>
+
+    {% include "components/navbar.html" %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    {% include "components/footer.html" %}
+
+</body>
+</html>

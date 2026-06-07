@@ -1,0 +1,124 @@
+.events {
+    display: grid;
+    gap: var(--margin-lg);
+}
+
+.events__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: var(--margin-md);
+}
+
+.events__header h1 {
+    font-size: var(--font-h1);
+}
+
+.events__filter {
+    background: var(--white);
+    padding: var(--margin-md);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    display: flex;
+    gap: var(--margin-md);
+    align-items: end;
+}
+
+.events__filter div {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.events__filter label {
+    white-space: nowrap;
+}
+
+.events-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--white);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+}
+
+.events-table th {
+    text-align: left;
+    padding: 1.5rem;
+    background: var(--green);
+    color: var(--white);
+}
+
+.events-table td {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--gray-light);
+}
+
+.events-table tr:hover {
+    background: rgba(74, 150, 85, 0.05);
+}
+
+.events-table a {
+    font-weight: 600;
+}
+
+.event-type {
+    display: inline-block;
+    background: rgba(74, 150, 85, 0.1);
+    color: var(--green);
+    padding: 0.4rem 1rem;
+    border-radius: 999px;
+}
+
+.event-card {
+    background: var(--white);
+    padding: var(--margin-md);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    display: grid;
+    gap: var(--margin-sm);
+}
+
+.event-card h2 {
+    font-size: var(--font-h3);
+}
+
+.event-card__date,
+.event-card__type {
+    color: var(--green);
+    font-weight: 600;
+}
+
+.organizers {
+    display: grid;
+    gap: var(--margin-md);
+    margin-top: var(--margin-lg);
+}
+
+.organizer-card {
+    background: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: var(--margin-md);
+}
+
+.organizer-card summary {
+    cursor: pointer;
+    font-size: var(--font-h3);
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    gap: var(--margin-md);
+}
+
+.organizer-card summary span {
+    color: var(--green);
+    font-weight: 600;
+}
+
+.organizer-card__events {
+    display: grid;
+    gap: var(--margin-md);
+    margin-top: var(--margin-md);
+}
