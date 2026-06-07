@@ -242,6 +242,7 @@ The main changes occurred in the `database.py` file, and in the models.
 SQLite and PostgresSQL have almost the same SQL language, and their Python libraries also have minor differences in usage.
 Open those files to understand the changes.
 
+
 One important difference now is that the `psycopg2` library requires some system libraries from the PostgresSQL installation.
 Hence, not having PostgresSQL installed will make the installation `psycopg2` fail.
 This is the point where you need to have PostgresSQL, and PGAdmin already installed.
