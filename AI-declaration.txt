@@ -1,0 +1,1 @@
+We had only used Ai (like chatgpt or le chat) to explain import concept, like how a E/R works.
