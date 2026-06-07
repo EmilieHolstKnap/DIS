@@ -40,14 +40,12 @@ def list_events(event_type=None, organizer=None):
             events.end_time,
             events.organizer,
             event_types.name,
-            locations.name,
+            events.location,
             events.ticket_url,
             events.is_free
         FROM events
         JOIN event_types
             ON events.event_type_id = event_types.id
-        JOIN locations
-            ON events.location_id = locations.id
     """
 
     conditions = []
@@ -68,11 +66,7 @@ def list_events(event_type=None, organizer=None):
 
     cur.execute(query, params)
 
-    db_events = cur.fetchall()
-
-    events = []
-    for event in db_events:
-        events.append(Event(*event))
+    events = [Event(*row) for row in cur.fetchall()]
 
     cur.close()
     conn.close()
@@ -93,14 +87,12 @@ def get_event(event_id):
             events.end_time,
             events.organizer,
             event_types.name,
-            locations.name,
+            events.location,
             events.ticket_url,
             events.is_free
         FROM events
         JOIN event_types
             ON events.event_type_id = event_types.id
-        JOIN locations
-            ON events.location_id = locations.id
         WHERE events.id = %s
     """, (event_id,))
 
@@ -152,9 +144,9 @@ def list_organizers():
 
     return organizers
 
+
 def list_events_grouped_by_organizer():
     events = list_events()
-
     grouped_events = {}
 
     for event in events:

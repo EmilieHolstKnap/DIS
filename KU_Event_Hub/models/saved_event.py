@@ -30,7 +30,7 @@ def get_saved_events(user_id):
             events.end_time,
             events.organizer,
             event_types.name,
-            locations.name,
+            events.location,
             events.ticket_url,
             events.is_free
         FROM events
@@ -38,8 +38,6 @@ def get_saved_events(user_id):
             ON events.id = saved_events.event_id
         JOIN event_types
             ON events.event_type_id = event_types.id
-        JOIN locations
-            ON events.location_id = locations.id
         WHERE saved_events.user_id = %s
         ORDER BY events.start_time
     """, (user_id,))
@@ -50,6 +48,21 @@ def get_saved_events(user_id):
     conn.close()
 
     return events
+
+
+def remove_saved_event(user_id, event_id):
+    conn = db_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        DELETE FROM saved_events
+        WHERE user_id = %s
+        AND event_id = %s
+    """, (user_id, event_id))
+
+    conn.commit()
+    cur.close()
+    conn.close()
 
 
 def is_event_saved(user_id, event_id):
@@ -69,18 +82,3 @@ def is_event_saved(user_id, event_id):
     conn.close()
 
     return saved
-
-
-def remove_saved_event(user_id, event_id):
-    conn = db_connection()
-    cur = conn.cursor()
-
-    cur.execute("""
-        DELETE FROM saved_events
-        WHERE user_id = %s
-        AND event_id = %s
-    """, (user_id, event_id))
-
-    conn.commit()
-    cur.close()
-    conn.close()

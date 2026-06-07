@@ -47,4 +47,20 @@
 
 {% endif %}
 
+<h1>Subscribed Organizers</h1>
+
+{% if subscribed_organizers %}
+
+    <div class="event-card">
+        {% for organizer in subscribed_organizers %}
+            <p>{{ organizer }}</p>
+        {% endfor %}
+    </div>
+
+{% else %}
+
+    <p>You are not subscribed to any organizers yet.</p>
+
+{% endif %}
+
 {% endblock %}

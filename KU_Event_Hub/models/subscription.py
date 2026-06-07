@@ -48,3 +48,21 @@ def is_organizer_subscribed(user_id, organizer):
     conn.close()
 
     return subscribed
+
+def get_subscribed_organizers(user_id):
+    conn = db_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT organizer
+        FROM organizer_subscriptions
+        WHERE user_id = %s
+        ORDER BY organizer
+    """, (user_id,))
+
+    organizers = [row[0] for row in cur.fetchall()]
+
+    cur.close()
+    conn.close()
+
+    return organizers

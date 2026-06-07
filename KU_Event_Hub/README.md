@@ -80,10 +80,8 @@ The application uses PostgreSQL and contains the following tables:
 - users: Registered users and password hashes.
 - events: Event information.
 - event_types: Event categories.
-- locations: Event locations.
-- sources: Source of imported event data.
-- saved_events: Many-to-many relation between users and saved events.
-- organizer_subscriptions**: Many-to-many relation between users and subscribed organizers.
+- saved_events: Stores events saved by users.
+- organizer_subscriptions: Stores organizer subscriptions.
 
 ## Features ⭐
 
