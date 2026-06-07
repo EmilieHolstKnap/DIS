@@ -1,0 +1,39 @@
+services:
+  database:
+    image: postgres:latest
+    container_name: database
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB} -t 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 10s
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: ku_event_hub
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      database:
+        condition: service_healthy
+    volumes:
+      - ./:/code
+    environment:
+      PGUSER: postgres
+      PGPASSWORD: 123
+      PGDATABASE: ku_event_hub
+      PGHOST: database
+      PGPORT: 5432
+      SECRET_KEY: 7f3b9d8a4e2c1f6a9b5d7e8c3f1a2b4c
+    ports:
+      - "5000:5000"
+
+volumes:
+  pgdata:

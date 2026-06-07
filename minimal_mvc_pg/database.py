@@ -1,3 +1,4 @@
+"""
 import psycopg2
 import os
 
@@ -30,3 +31,4 @@ def init_db():
 
     conn.commit()
     conn.close()
+"""
