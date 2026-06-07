@@ -15,6 +15,7 @@ Clone / download the repository files and install the required packages (prefera
 Create a PostgreSQL database (preferably named `ku_event_hub`).
 
 If running locally, configure the following environment variables:
+
     export PGUSER=<postgres_username>
     export PGPASSWORD=<postgres_password>
     export PGDATABASE=ku_event_hub
